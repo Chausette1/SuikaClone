@@ -21,6 +21,10 @@ void fruit::fall()
 
 void fruit::draw()
 {
+	Rectangle sourceRec = { 0.0f, 0.0f, (float)sprite.width, (float)sprite.height };
+	Rectangle destRec = { (float)x, (float)y, size, size };
+	Vector2 origin = { (float)size / 2, (float)size / 2 };
+	DrawTexturePro(sprite, sourceRec, destRec, origin, 0.0f, WHITE);
 }
 
 bool fruit::getIsFalling()

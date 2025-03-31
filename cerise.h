@@ -4,6 +4,5 @@ class cerise : public fruit
 {
 public:
 	cerise();
-	void draw();
 };
 

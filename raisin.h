@@ -2,5 +2,7 @@
 #include "include.h"
 class raisin : public fruit
 {
+public:
+	raisin();
 };
 
