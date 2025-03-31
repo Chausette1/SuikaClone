@@ -127,14 +127,36 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ananas.cpp" />
+    <ClCompile Include="cerise.cpp" />
     <ClCompile Include="droppeur.cpp" />
+    <ClCompile Include="fraise.cpp" />
     <ClCompile Include="fruit.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mandarine.cpp" />
+    <ClCompile Include="melon.cpp" />
+    <ClCompile Include="orange.cpp" />
+    <ClCompile Include="pamplemousse.cpp" />
+    <ClCompile Include="peach.cpp" />
+    <ClCompile Include="pomme.cpp" />
+    <ClCompile Include="raisin.cpp" />
+    <ClCompile Include="watermelon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ananas.h" />
+    <ClInclude Include="cerise.h" />
     <ClInclude Include="droppeur.h" />
+    <ClInclude Include="fraise.h" />
     <ClInclude Include="fruit.h" />
     <ClInclude Include="include.h" />
+    <ClInclude Include="mandarine.h" />
+    <ClInclude Include="melon.h" />
+    <ClInclude Include="orange.h" />
+    <ClInclude Include="pamplemousse.h" />
+    <ClInclude Include="peach.h" />
+    <ClInclude Include="pomme.h" />
+    <ClInclude Include="raisin.h" />
+    <ClInclude Include="watermelon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

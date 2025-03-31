@@ -4,18 +4,18 @@
 
 class fruit
 {
-private:
+protected:
 	int x;
 	int y;
 	int speed;
 	int size;
 	bool isFalling;
 	Texture2D sprite;
+	fruit();
 
 public:
-	fruit();
-	void draw();
-	void fall();
-	bool getIsFalling();
-	void updateX();
+	void virtual draw();
+	void virtual fall();
+	bool virtual getIsFalling();
+	void virtual updateX();
 };

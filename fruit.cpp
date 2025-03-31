@@ -2,11 +2,9 @@
 
 fruit::fruit()
 {
-	x = GetRandomValue(190, 620);
+	x = GetMouseX();
 	y = 140;
 	speed = 10;
-	size = 20;
-	sprite = LoadTexture("resources/img/circle0.png");
 }
 
 void fruit::fall()
@@ -21,18 +19,13 @@ void fruit::fall()
 	}
 }
 
+void fruit::draw()
+{
+}
+
 bool fruit::getIsFalling()
 {
 	return isFalling;
-}
-
-void fruit::draw()
-{
-	int SpriteSize = 20;
-	Rectangle sourceRec = { 0.0f, 0.0f, (float)sprite.width, (float)sprite.height };
-	Rectangle destRec = { (float)x, (float)y, SpriteSize, SpriteSize };
-	Vector2 origin = { (float)sprite.width / 2, (float)sprite.height / 2 };
-	DrawTexturePro(sprite, sourceRec, destRec, origin, 0.0f, WHITE);
 }
 
 void fruit::updateX()
