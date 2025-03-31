@@ -1,6 +1,6 @@
 #include "include.h"
 
-void DrawContainer(droppeur drop, fruit fruit) {
+void DrawContainer(droppeur drop, fruit& fruit) {
 	drop.updateX();
 	fruit.updateX();
 	Color color = { 255, 244, 157, 255 };
