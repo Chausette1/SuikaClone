@@ -2,7 +2,8 @@
 
 #include "include.h"
 
-pamplemousse::pamplemousse() {
+pamplemousse::pamplemousse() : fruit()
+{
 	size = 65;
 	sprite = LoadTexture("resources/img/circle6.png");
 }

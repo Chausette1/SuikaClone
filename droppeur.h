@@ -12,5 +12,5 @@ private:
 public:
 	droppeur();
 	void updateX();
-	void draw();
+	void draw() const;
 };

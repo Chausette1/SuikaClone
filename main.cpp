@@ -1,42 +1,20 @@
+#pragma once
 #include "include.h"
-
-void DrawContainer(droppeur drop, fruit& fruit) {
-	drop.updateX();
-	if (!fruit.getIsFall())
-	{
-		fruit.updateX();
-	}
-	Color color = { 255, 244, 157, 255 };
-	DrawRectangle(180, 210, 10, 650, color);
-	DrawRectangle(620, 210, 10, 650, color);
-	DrawRectangle(180, 850, 440, 10, color);
-	drop.draw();
-	fruit.draw();
-}
 
 int main()
 {
 	InitWindow(800, 900, "Hello World");
 	SetTargetFPS(60);
-	droppeur droppeur;
-	fruit fruit = pomme();
+	game* mygame = new game(800, 900);
+	bool IsMousePressed = false;
 	while (!WindowShouldClose()) {
-		BeginDrawing();
-		Color backColor = { 194, 162, 79, 255 };
-		ClearBackground(backColor);
-
-		if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
 		{
-			fruit.setFall(true);
+			IsMousePressed = true;
 		}
-		if (fruit.getIsFalling())
-		{
-			fruit.fall();
-		}
-
-		DrawContainer(droppeur, fruit);
-		DrawText("Hello World", 10, 10, 20, LIGHTGRAY);
-		EndDrawing();
+		mygame->update(IsMousePressed);
+		IsMousePressed = false;
+		mygame->draw();
 	}
 	CloseWindow();
 	return 0;

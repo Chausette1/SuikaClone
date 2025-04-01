@@ -1,7 +1,8 @@
 #pragma once
 #include "include.h"
 
-peach::peach() {
+peach::peach() : fruit()
+{
 	size = 70;
 	sprite = LoadTexture("resources/img/circle7.png");
 }

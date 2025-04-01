@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+#include <vector>
 #include "raylib.h"
 #include "droppeur.h"
 #include "fruit.h"
@@ -14,4 +16,4 @@
 #include "ananas.h"
 #include "melon.h"
 #include "watermelon.h"
-#include <iostream>
+#include "game.h"

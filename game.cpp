@@ -1,0 +1,97 @@
+#pragma once
+
+#include "include.h"
+
+game::game(int width, int height)
+{
+	screenWidth = width;
+	screenHeight = height;
+	boxWidth = 600;
+	boxHeight = 800;
+	background = LoadTexture("resources/img/background.png");
+	box = LoadTexture("resources/img/box2.png");
+	mydroppeur = new droppeur();
+	currentFruit = new pomme();
+	fruits = std::vector<fruit*>();
+}
+
+void game::drawBackground()
+{
+	Rectangle sourceRec = { 0.0f, 0.0f, background.width, background.height };
+	Rectangle destRec = { 0.0f, 0.0f, screenWidth, screenHeight };
+	Vector2 origin = { 0,0 };
+	DrawTexturePro(background, sourceRec, destRec, origin, 0.0f, WHITE);
+}
+
+bool game::checkIfFruitIsFall()
+{
+	bool result = false;
+	for (fruit* f : fruits)
+	{
+		if (f->getIsFalling())
+		{
+			result = true;
+			break;
+		}
+	}
+	return result;
+}
+
+void game::drawFruits()
+{
+	for (fruit* f : fruits)
+	{
+		f->draw();
+	}
+	currentFruit->draw();
+}
+
+void game::drawDroppeur()
+{
+	mydroppeur->draw();
+}
+
+void game::drawBox()
+{
+	Rectangle sourceRec = { 0.0f, 0.0f, box.width, box.height };
+	Rectangle destRec = { 100.0f, 100.0f, boxWidth, boxHeight };
+	Vector2 origin = { 0.0f, 0.0f };
+	DrawTexturePro(box, sourceRec, destRec, origin, 0.0f, WHITE);
+}
+
+void game::draw()
+{
+	BeginDrawing();
+	ClearBackground(WHITE);
+	drawBackground();
+	drawBox();
+	drawDroppeur();
+	drawFruits();
+	EndDrawing();
+}
+
+void game::update(bool IsMousePressed)
+{
+	mydroppeur->updateX();
+
+	if (!currentFruit->getIsFalling() && !currentFruit->getIsFall())
+	{
+		currentFruit->updateX();
+		if (IsMousePressed)
+		{
+			currentFruit->setFall(true);
+			currentFruit->fall();
+		}
+	}
+	if (currentFruit->getIsFalling())
+	{
+		currentFruit->fall();
+	}
+	else if (currentFruit->getIsFall())
+	{
+		fruits.push_back(currentFruit);
+		currentFruit = new pomme();
+	}
+
+	draw();
+}

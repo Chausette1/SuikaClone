@@ -1,3 +1,4 @@
+#pragma once
 #include "include.h"
 
 droppeur::droppeur() : y(120), size(200)
@@ -8,22 +9,24 @@ droppeur::droppeur() : y(120), size(200)
 
 void droppeur::updateX()
 {
+	int minX = 180;
+	int maxX = 620;
 	int MouseX = GetMouseX();
-	if (MouseX > 190 && MouseX < 620)
+	if (MouseX > minX && MouseX < maxX)
 	{
 		x = MouseX;
 	}
-	else if (MouseX <= 190)
+	else if (MouseX <= minX)
 	{
-		x = 190;
+		x = minX;
 	}
-	else if (MouseX >= 620)
+	else if (MouseX >= maxX)
 	{
-		x = 620;
+		x = maxX;
 	}
 }
 
-void droppeur::draw()
+void droppeur::draw() const
 {
 	Rectangle sourceRec = { 0.0f, 0.0f, (float)sprite.width, (float)sprite.height };
 	Rectangle destRec = { (float)x, (float)y, size, size };

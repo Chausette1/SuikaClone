@@ -2,7 +2,7 @@
 
 #include "include.h"
 
-ananas::ananas()
+ananas::ananas() : fruit()
 {
 	size = 75;
 	sprite = LoadTexture("resources/img/circle8.png");

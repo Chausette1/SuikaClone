@@ -1,3 +1,4 @@
+#pragma once
 #include "include.h"
 
 fruit::fruit()
@@ -13,7 +14,7 @@ void fruit::fall()
 {
 	if (!isFall)
 	{
-		isFall = true;
+		isFalling = true;
 	}
 	if (isFalling)
 	{
@@ -22,6 +23,7 @@ void fruit::fall()
 		if (y > minY)
 		{
 			isFalling = false;
+			isFall = true;
 		}
 	}
 }
@@ -52,8 +54,8 @@ bool fruit::getIsFall()
 void fruit::updateX()
 {
 	int MouseX = GetMouseX();
-	int minX = 190 + (size / 2);
-	int maxX = 620 - (size / 2);
+	int minX = 180;
+	int maxX = 620;
 	if (MouseX > minX && MouseX < maxX)
 	{
 		x = MouseX;
