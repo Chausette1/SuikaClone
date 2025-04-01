@@ -3,16 +3,23 @@
 fruit::fruit()
 {
 	x = GetMouseX();
-	y = 140;
+	y = 160;
 	speed = 10;
+	isFalling = false;
+	isFall = false;
 }
 
 void fruit::fall()
 {
+	if (!isFall)
+	{
+		isFall = true;
+	}
 	if (isFalling)
 	{
 		y += speed;
-		if (y > 850)
+		int minY = 850 - (size / 2) - 10;
+		if (y > minY)
 		{
 			isFalling = false;
 		}
@@ -32,19 +39,31 @@ bool fruit::getIsFalling()
 	return isFalling;
 }
 
+void fruit::setFall(bool fall)
+{
+	isFalling = fall;
+}
+
+bool fruit::getIsFall()
+{
+	return isFall;
+}
+
 void fruit::updateX()
 {
 	int MouseX = GetMouseX();
-	if (MouseX > 190 && MouseX < 620)
+	int minX = 190 + (size / 2);
+	int maxX = 620 - (size / 2);
+	if (MouseX > minX && MouseX < maxX)
 	{
 		x = MouseX;
 	}
-	else if (MouseX <= 190)
+	else if (MouseX <= minX)
 	{
-		x = 190;
+		x = minX;
 	}
-	else if (MouseX >= 620)
+	else if ((MouseX >= maxX))
 	{
-		x = 620;
+		x = maxX;
 	}
 }

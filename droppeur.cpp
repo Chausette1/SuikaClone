@@ -1,8 +1,9 @@
 #include "include.h"
 
-droppeur::droppeur() : y(120)
+droppeur::droppeur() : y(120), size(200)
 {
 	x = 400;
+	sprite = LoadTexture("resources/img/droppeur.png");
 }
 
 void droppeur::updateX()
@@ -24,5 +25,8 @@ void droppeur::updateX()
 
 void droppeur::draw()
 {
-	DrawCircle(x, y, 20, RED);
+	Rectangle sourceRec = { 0.0f, 0.0f, (float)sprite.width, (float)sprite.height };
+	Rectangle destRec = { (float)x, (float)y, size, size };
+	Vector2 origin = { (float)size / 2, (float)size / 2 };
+	DrawTexturePro(sprite, sourceRec, destRec, origin, 0.0f, WHITE);
 }

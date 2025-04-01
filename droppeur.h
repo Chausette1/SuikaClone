@@ -6,6 +6,7 @@ class droppeur
 private:
 	int x;
 	const int y;
+	const int size;
 	Texture2D sprite;
 
 public:
