@@ -24,5 +24,6 @@ private:
 	void drawBackground();
 	void drawBox();
 	bool checkIfFruitIsFall();
+	fruit* getRandomFruit();
 };
 

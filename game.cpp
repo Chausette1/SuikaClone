@@ -11,7 +11,7 @@ game::game(int width, int height)
 	background = LoadTexture("resources/img/background.png");
 	box = LoadTexture("resources/img/box2.png");
 	mydroppeur = new droppeur();
-	currentFruit = new pomme();
+	currentFruit = getRandomFruit();
 	fruits = std::vector<fruit*>();
 }
 
@@ -90,8 +90,27 @@ void game::update(bool IsMousePressed)
 	else if (currentFruit->getIsFall())
 	{
 		fruits.push_back(currentFruit);
-		currentFruit = new pomme();
+		currentFruit = getRandomFruit();
 	}
 
 	draw();
+}
+
+fruit* game::getRandomFruit() {
+	int random = (rand() % 100) + 1;
+	if (random < 40) {
+		return new cerise();
+	}
+	else if (random < 75) {
+		return new fraise();
+	}
+	else if (random < 90) {
+		return new raisin();
+	}
+	else if (random < 95) {
+		return new mandarine();
+	}
+	else {
+		return new orange();
+	}
 }

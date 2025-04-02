@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <cstdlib>
 #include "raylib.h"
 #include "droppeur.h"
 #include "fruit.h"
