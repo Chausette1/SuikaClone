@@ -16,9 +16,10 @@ protected:
 
 public:
 	void virtual draw();
-	void virtual fall();
+	void virtual fall(std::vector<fruit*> listFruits);
 	bool virtual getIsFalling();
 	void virtual setFall(bool fall);
 	bool virtual getIsFall();
 	void virtual updateX();
+	bool virtual IsColliding(fruit* otherFruit);
 };

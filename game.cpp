@@ -17,8 +17,8 @@ game::game(int width, int height)
 
 void game::drawBackground()
 {
-	Rectangle sourceRec = { 0.0f, 0.0f, background.width, background.height };
-	Rectangle destRec = { 0.0f, 0.0f, screenWidth, screenHeight };
+	Rectangle sourceRec = { 0.0f, 0.0f, static_cast<float>(background.width), static_cast<float>(background.height) };
+	Rectangle destRec = { 0.0f, 0.0f, static_cast<float>(screenWidth), static_cast<float>(screenHeight) };
 	Vector2 origin = { 0,0 };
 	DrawTexturePro(background, sourceRec, destRec, origin, 0.0f, WHITE);
 }
@@ -80,12 +80,12 @@ void game::update(bool IsMousePressed)
 		if (IsMousePressed)
 		{
 			currentFruit->setFall(true);
-			currentFruit->fall();
+			currentFruit->fall(fruits);
 		}
 	}
 	if (currentFruit->getIsFalling())
 	{
-		currentFruit->fall();
+		currentFruit->fall(fruits);
 	}
 	else if (currentFruit->getIsFall())
 	{

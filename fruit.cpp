@@ -10,7 +10,7 @@ fruit::fruit()
 	isFall = false;
 }
 
-void fruit::fall()
+void fruit::fall(std::vector<fruit*> listFruits)
 {
 	if (!isFall)
 	{
@@ -24,6 +24,15 @@ void fruit::fall()
 		{
 			isFalling = false;
 			isFall = true;
+		}
+		for (fruit* f : listFruits)
+		{
+			if (IsColliding(f))
+			{
+				isFalling = false;
+				isFall = true;
+				y = f->y - size;
+			}
 		}
 	}
 }
@@ -68,4 +77,11 @@ void fruit::updateX()
 	{
 		x = maxX;
 	}
+}
+
+bool fruit::IsColliding(fruit* otherFruit)
+{
+	Vector2 myPos = { (float)x, (float)y };
+	Vector2 otherPos = { (float)otherFruit->x, (float)otherFruit->y };
+	return CheckCollisionCircles(myPos, (float)size, otherPos, (float)otherFruit->size);
 }
