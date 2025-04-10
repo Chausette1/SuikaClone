@@ -2,6 +2,6 @@
 #include "include.h"
 
 mandarine::mandarine() : fruit() {
-	size = 50;
+	radius = 40;
 	sprite = LoadTexture("resources/img/circle3.png");
 }

@@ -4,6 +4,6 @@
 
 pamplemousse::pamplemousse() : fruit()
 {
-	size = 65;
+	radius = 95;
 	sprite = LoadTexture("resources/img/circle6.png");
 }

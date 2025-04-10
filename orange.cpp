@@ -3,6 +3,6 @@
 
 orange::orange() : fruit()
 {
-	size = 55;
+	radius = 50;
 	sprite = LoadTexture("resources/img/circle4.png");
 }

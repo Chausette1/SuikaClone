@@ -4,6 +4,6 @@
 
 watermelon::watermelon() : fruit()
 {
-	size = 85;
+	radius = 130;
 	sprite = LoadTexture("resources/img/circle10.png");
 }

@@ -4,6 +4,6 @@
 
 raisin::raisin() : fruit()
 {
-	size = 45;
+	radius = 30;
 	sprite = LoadTexture("resources/img/circle2.png");
 }

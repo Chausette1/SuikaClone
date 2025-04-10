@@ -4,6 +4,6 @@
 
 melon::melon() : fruit()
 {
-	size = 80;
+	radius = 110;
 	sprite = LoadTexture("resources/img/circle9.png");
 }

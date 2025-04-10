@@ -15,6 +15,7 @@ public:
 	void update(bool IsMousePressed);
 	void draw();
 private:
+	int numberOfFruits;
 	int screenWidth;
 	int screenHeight;
 	int boxWidth;
@@ -24,6 +25,6 @@ private:
 	void drawBackground();
 	void drawBox();
 	bool checkIfFruitIsFall();
-	fruit* getRandomFruit();
+	fruit* getRandomFruit(int f);
 };
 

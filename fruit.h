@@ -4,14 +4,28 @@
 
 class fruit
 {
+private:
+	void ManageFruitOverlap();
+	void DoCollision(std::vector<fruit*> listFruits);
+	void ManageFruitXCollision();
+	void CheckIfHitBoxesAreHit();
+	void ManageMultipleCollision(fruit* newCollision, std::vector<fruit*> listFruits);
+	Rectangle leftEdge = { 19, 0 ,100, 1000 };
+	Rectangle RightEdge = { 679, 0 , 100, 1000 };
+	Rectangle BottomEdge = { 0, 850,1000 , 100 };
+
 protected:
 	int x;
 	int y;
 	int speed;
-	int size;
+	int radius;
 	bool isFalling;
 	bool isFall;
 	Texture2D sprite;
+	int angle;
+	bool Collision;
+	fruit* currentCollision;
+	std::vector<fruit*> listCollision;
 	fruit();
 
 public:

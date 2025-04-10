@@ -3,6 +3,6 @@
 
 peach::peach() : fruit()
 {
-	size = 70;
+	radius = 80;
 	sprite = LoadTexture("resources/img/circle7.png");
 }

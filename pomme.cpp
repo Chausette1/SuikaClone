@@ -4,6 +4,6 @@
 
 pomme::pomme() : fruit()
 {
-	size = 60;
+	radius = 65;
 	sprite = LoadTexture("resources/img/circle5.png");
 }

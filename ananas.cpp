@@ -4,6 +4,6 @@
 
 ananas::ananas() : fruit()
 {
-	size = 75;
+	radius = 110;
 	sprite = LoadTexture("resources/img/circle8.png");
 }
