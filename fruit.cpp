@@ -1,5 +1,5 @@
 #pragma once
-#include "include.h"
+#include "fruit.h"
 
 fruit::fruit()
 {
@@ -9,8 +9,14 @@ fruit::fruit()
 	isFalling = false;
 	isFall = false;
 	angle = 0;
-	bool Collision = false;
-	fruit* currentCollision = nullptr;
+	Collision = false;
+	currentCollision = nullptr;
+	aEffacer = false;
+}
+
+fruit::~fruit()
+{
+	this->currentCollision = nullptr;
 }
 
 void fruit::ManageFruitOverlap() {
@@ -83,6 +89,7 @@ void fruit::DoCollision(std::vector<fruit*> listFruits) {
 			if (IsColliding(newCollision))
 			{
 				ManageMultipleCollision(newCollision, listFruits);
+				
 			}
 		}
 	}
@@ -103,6 +110,15 @@ void fruit::fall(std::vector<fruit*> listFruits)
 				Collision = true;
 				currentCollision = f;
 				listCollision.push_back(f);
+				
+				if (IsFusion(f))
+				{
+					fruit* newFruit = Fusion(f);
+					listCollision.push_back(newFruit);
+					aEffacer = true;
+					return; 
+				}
+
 			}
 		}
 	}
@@ -157,7 +173,13 @@ void fruit::updateX()
 
 bool fruit::IsColliding(fruit* otherFruit)
 {
+
 	Vector2 myPos = { (float)x, (float)y };
 	Vector2 otherPos = { (float)otherFruit->x, (float)otherFruit->y };
 	return CheckCollisionCircles(myPos, (float)radius, otherPos, (float)otherFruit->radius);
+}
+
+bool fruit::IsFusion(fruit* otherFruit) {
+	return typeid(*this) == typeid(*otherFruit);
+
 }

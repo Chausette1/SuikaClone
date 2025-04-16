@@ -1,8 +1,10 @@
 #pragma once
-#include "include.h"
+#include "fruit.h"
+#include "mandarine.h"
 class raisin : public fruit
 {
 public:
 	raisin();
+	~raisin();
+	virtual fruit* Fusion(fruit* otherFruit) override;
 };
-

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "include.h"
+#include "game.h"
 
 game::game(int width, int height)
 {
@@ -84,11 +84,32 @@ void game::update(bool IsMousePressed)
 			currentFruit->fall(fruits);
 		}
 	}
-	if (currentFruit->getIsFalling())
-	{
-		currentFruit->fall(fruits);
+	else { 
+		while (!currentFruit->getIsFall() && currentFruit->getIsFalling()) {
+			currentFruit->fall(fruits); 
+			
+			
+			if (currentFruit -> aEffacer) {
+				delete currentFruit;
+				for (fruit* f : fruits )
+				{
+					if (f != nullptr)
+					{
+						f->setFall(false);
+						f->setIsFalling(false);
+						f->aEffacer = false;
+						f->isFalling = false;
+						f->y = 0;
+					}
+				}
+				break;
+				
+			}
+			draw();
+		}
 	}
-	else if (currentFruit->getIsFall())
+	
+	if (currentFruit->getIsFall())
 	{
 		fruits.push_back(currentFruit);
 		currentFruit = getRandomFruit(numberOfFruits);
@@ -99,7 +120,7 @@ void game::update(bool IsMousePressed)
 }
 
 fruit* game::getRandomFruit(int f) {
-	/*int random = (rand() % 100) + 1;
+	int random = (rand() % 100) + 1;
 	if (random < 40) {
 		return new cerise();
 	}
@@ -114,29 +135,5 @@ fruit* game::getRandomFruit(int f) {
 	}
 	else {
 		return new orange();
-	}*/
-	switch (f % 11) {
-	case 0:
-		return new cerise();
-	case 1:
-		return new fraise();
-	case 2:
-		return new raisin();
-	case 3:
-		return new mandarine();
-	case 4:
-		return new orange();
-	case 5:
-		return new pomme();
-	case 6:
-		return new peach();
-	case 7:
-		return new pamplemousse();
-	case 8:
-		return new ananas();
-	case 9:
-		return new melon();
-	case 10:
-		return new watermelon();
 	}
 }
