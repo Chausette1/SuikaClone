@@ -15,7 +15,7 @@ private:
 	Rectangle BottomEdge = { 0, 850,1000 , 100 };
 
 protected:
-	
+
 	int speed;
 	int radius;
 	bool isFalling;
@@ -26,22 +26,21 @@ protected:
 	fruit* currentCollision;
 	std::vector<fruit*> listCollision;
 	fruit();
-	
+
 
 public:
 	void virtual draw();
-	void virtual fall(std::vector<fruit*> listFruits);
+	void virtual fall(std::vector<fruit*>& listFruits);
 	bool virtual getIsFalling();
 	void virtual setFall(bool fall);
 	bool virtual getIsFall();
 	void virtual updateX();
 	bool virtual IsColliding(fruit* otherFruit);
-	bool virtual IsFusion(fruit * otherFruit);
+	bool virtual IsFusion(fruit* otherFruit);
 	virtual fruit* Fusion(fruit* otherFruit) = 0;
+	bool virtual DoFusion(fruit* f, std::vector<fruit*>& listFruits);
 	int x;
 	int y;
 	virtual ~fruit();
 	bool aEffacer;
-
-
 };

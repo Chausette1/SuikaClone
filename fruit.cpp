@@ -80,22 +80,27 @@ void fruit::DoCollision(std::vector<fruit*> listFruits) {
 		ManageFruitXCollision();
 		CheckIfHitBoxesAreHit();
 		Collision = false;
-		for (fruit* newCollision : listFruits)
+		for (fruit* potential_collision : listFruits)
 		{
-			if (newCollision == currentCollision)
+			if (potential_collision == currentCollision)
 			{
 				continue;
 			}
-			if (IsColliding(newCollision))
+			if (IsColliding(potential_collision))
 			{
-				ManageMultipleCollision(newCollision, listFruits);
-				
+				bool IsFusion = DoFusion(potential_collision, listFruits);
+				if (IsFusion)
+				{
+					return;
+				}
+				ManageMultipleCollision(potential_collision, listFruits);
+
 			}
 		}
 	}
 }
 
-void fruit::fall(std::vector<fruit*> listFruits)
+void fruit::fall(std::vector<fruit*>& listFruits)
 {
 	//make hitbox
 
@@ -110,21 +115,32 @@ void fruit::fall(std::vector<fruit*> listFruits)
 				Collision = true;
 				currentCollision = f;
 				listCollision.push_back(f);
-				
-				if (IsFusion(f))
+				bool IsFusion = DoFusion(f, listFruits);
+				if (IsFusion)
 				{
-					fruit* newFruit = Fusion(f);
-					listCollision.push_back(newFruit);
-					aEffacer = true;
-					return; 
+					return;
 				}
-
 			}
 		}
 	}
 	if (Collision) {
 		DoCollision(listFruits);
 	}
+}
+
+bool fruit::DoFusion(fruit* f, std::vector<fruit*>& listFruits)
+{
+	if (IsFusion(f))
+	{
+		fruit* newFruit = Fusion(f);
+		newFruit->isFalling = true;
+		this->aEffacer = true;
+		f->aEffacer = true;
+		listFruits.push_back(newFruit);
+		listCollision.erase(std::remove(listCollision.begin(), listCollision.end(), f), listCollision.end());
+		return true;
+	}
+	return false;
 }
 
 
@@ -173,7 +189,6 @@ void fruit::updateX()
 
 bool fruit::IsColliding(fruit* otherFruit)
 {
-
 	Vector2 myPos = { (float)x, (float)y };
 	Vector2 otherPos = { (float)otherFruit->x, (float)otherFruit->y };
 	return CheckCollisionCircles(myPos, (float)radius, otherPos, (float)otherFruit->radius);

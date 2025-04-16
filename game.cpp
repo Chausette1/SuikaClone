@@ -84,35 +84,35 @@ void game::update(bool IsMousePressed)
 			currentFruit->fall(fruits);
 		}
 	}
-	else { 
+	else {
 		while (!currentFruit->getIsFall() && currentFruit->getIsFalling()) {
-			currentFruit->fall(fruits); 
-			
-			
-			if (currentFruit -> aEffacer) {
+			currentFruit->fall(fruits);
+
+			if (currentFruit->aEffacer) {
+				numberOfFruits--;
 				delete currentFruit;
-				for (fruit* f : fruits )
+				currentFruit = fruits[fruits.size() - 1];
+				fruits.pop_back();
+				for (fruit* f : fruits)
 				{
-					if (f != nullptr)
+					if (f->aEffacer)
 					{
-						f->setFall(false);
-						f->setIsFalling(false);
-						f->aEffacer = false;
-						f->isFalling = false;
-						f->y = 0;
+						fruits.erase(std::remove_if(fruits.begin(), fruits.end(), [](fruit* f) { return f->aEffacer; }), fruits.end());
+						delete f;
+						f = nullptr;
 					}
 				}
 				break;
-				
 			}
 			draw();
 		}
 	}
-	
+
 	if (currentFruit->getIsFall())
 	{
 		fruits.push_back(currentFruit);
 		currentFruit = getRandomFruit(numberOfFruits);
+
 		numberOfFruits++;
 	}
 
