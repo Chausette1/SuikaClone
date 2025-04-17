@@ -1,12 +1,15 @@
+#pragma once
+
 #include "mandarine.h"
+#include "game.h"
 
 mandarine::mandarine() : fruit() {
 	radius = 40;
-	sprite = LoadTexture("resources/img/circle3.png");
+	sprite = game::sprite3;
 }
 
 mandarine::~mandarine() {
-	UnloadTexture(sprite);
+	fruit::~fruit();
 }
 
 fruit* mandarine::Fusion(fruit* otherFruit) {

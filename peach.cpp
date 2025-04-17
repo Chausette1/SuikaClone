@@ -1,12 +1,15 @@
+#pragma once
+
 #include "peach.h"
+#include "game.h"
 
 peach::peach() : fruit() {
 	radius = 80;
-	sprite = LoadTexture("resources/img/circle7.png");
+	sprite = game::sprite6;
 }
 
 peach::~peach() {
-	UnloadTexture(sprite);
+	fruit::~fruit();
 }
 
 fruit* peach::Fusion(fruit* otherFruit) {

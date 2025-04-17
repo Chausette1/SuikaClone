@@ -6,13 +6,15 @@ class fruit
 {
 private:
 	void ManageFruitOverlap();
-	void DoCollision(std::vector<fruit*> listFruits);
-	void ManageFruitXCollision();
+	void DoCollision(std::vector<fruit*> listFruits, fruit* f);
+	bool ManageFruitXCollision();
 	void CheckIfHitBoxesAreHit();
-	void ManageMultipleCollision(fruit* newCollision, std::vector<fruit*> listFruits);
+	void EndFall();
+	bool ManageCollision(fruit* newCollision);
 	Rectangle leftEdge = { 19, 0 ,100, 1000 };
 	Rectangle RightEdge = { 679, 0 , 100, 1000 };
 	Rectangle BottomEdge = { 0, 850,1000 , 100 };
+	fruit* lastCollision;
 
 protected:
 
@@ -27,11 +29,11 @@ protected:
 	std::vector<fruit*> listCollision;
 	fruit();
 
-
 public:
 	void virtual draw();
 	void virtual fall(std::vector<fruit*>& listFruits);
 	bool virtual getIsFalling();
+	void virtual setFalling(bool fall);
 	void virtual setFall(bool fall);
 	bool virtual getIsFall();
 	void virtual updateX();

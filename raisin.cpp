@@ -1,16 +1,16 @@
 #pragma once
 
 #include "raisin.h"
+#include "game.h"
 
 raisin::raisin() : fruit()
 {
 	radius = 30;
-	sprite = LoadTexture("resources/img/circle2.png");
+	sprite = game::sprite2;
 }
 raisin::~raisin()
 {
 	fruit::~fruit();
-	UnloadTexture(sprite);
 }
 fruit* raisin::Fusion(fruit* otherFruit) {
 	raisin* other = dynamic_cast<raisin*>(otherFruit);

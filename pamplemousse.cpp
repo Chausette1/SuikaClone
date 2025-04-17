@@ -1,12 +1,15 @@
+#pragma once
+
 #include "pamplemousse.h"
+#include "game.h"
 
 pamplemousse::pamplemousse() : fruit() {
 	radius = 95;
-	sprite = LoadTexture("resources/img/circle6.png");
+	sprite = game::sprite7;
 }
 
 pamplemousse::~pamplemousse() {
-	UnloadTexture(sprite);
+	fruit::~fruit();
 }
 
 fruit* pamplemousse::Fusion(fruit* otherFruit) {

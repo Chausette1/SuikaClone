@@ -4,30 +4,18 @@
 
 int main()
 {
-    InitWindow(800, 900, "Hello World");
-    SetTargetFPS(144);
+	InitWindow(800, 900, "Hello World");
+	SetTargetFPS(1000);
 
-    game* mygame = new game(800, 900);
-    bool IsMousePressed = false;
+	game* mygame = new game(800, 900);
+	bool IsMousePressed = false;
 
-    while (!WindowShouldClose())
-    {
-       
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
-        {
-            IsMousePressed = true;
-        }
+	while (!WindowShouldClose())
+	{
+		mygame->update();
+		mygame->draw();
+	}
 
-        
-        mygame->update(IsMousePressed);
-
-        
-        IsMousePressed = false;
-
-       
-        mygame->draw();
-    }
-
-    CloseWindow();
-    return 0;
+	CloseWindow();
+	return 0;
 }

@@ -1,12 +1,15 @@
+#pragma once
+
 #include "pomme.h"
+#include "game.h"
 
 pomme::pomme() : fruit() {
 	radius = 65;
-	sprite = LoadTexture("resources/img/circle5.png");
+	sprite = game::sprite5;
 }
 
 pomme::~pomme() {
-	UnloadTexture(sprite);
+	fruit::~fruit();
 }
 
 fruit* pomme::Fusion(fruit* otherFruit) {

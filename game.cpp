@@ -1,6 +1,18 @@
 #pragma once
 
 #include "game.h"
+// Définition des variables statiques de sprites
+Texture2D game::sprite0;
+Texture2D game::sprite1;
+Texture2D game::sprite2;
+Texture2D game::sprite3;
+Texture2D game::sprite4;
+Texture2D game::sprite5;
+Texture2D game::sprite6;
+Texture2D game::sprite7;
+Texture2D game::sprite8;
+Texture2D game::sprite9;
+Texture2D game::sprite10;
 
 game::game(int width, int height)
 {
@@ -14,6 +26,18 @@ game::game(int width, int height)
 	mydroppeur = new droppeur();
 	currentFruit = getRandomFruit(numberOfFruits);
 	fruits = std::vector<fruit*>();
+
+	sprite0 = LoadTexture("resources/img/circle0.png");
+	sprite1 = LoadTexture("resources/img/circle1.png");
+	sprite2 = LoadTexture("resources/img/circle2.png");
+	sprite3 = LoadTexture("resources/img/circle3.png");
+	sprite4 = LoadTexture("resources/img/circle4.png");
+	sprite5 = LoadTexture("resources/img/circle5.png");
+	sprite6 = LoadTexture("resources/img/circle7.png");
+	sprite7 = LoadTexture("resources/img/circle6.png");
+	sprite8 = LoadTexture("resources/img/circle8.png");
+	sprite9 = LoadTexture("resources/img/circle9.png");
+	sprite10 = LoadTexture("resources/img/circle10.png");
 }
 
 void game::drawBackground()
@@ -71,52 +95,62 @@ void game::draw()
 	EndDrawing();
 }
 
-void game::update(bool IsMousePressed)
+void game::update()
 {
-	mydroppeur->updateX();
-
-	if (!currentFruit->getIsFalling() && !currentFruit->getIsFall())
-	{
+	while (!IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+		mydroppeur->updateX();
 		currentFruit->updateX();
-		if (IsMousePressed)
-		{
-			currentFruit->setFall(true);
-			currentFruit->fall(fruits);
-		}
+		draw();
 	}
-	else {
-		while (!currentFruit->getIsFall() && currentFruit->getIsFalling()) {
-			currentFruit->fall(fruits);
+	currentFruit->setFalling(true);
+	DoFall(currentFruit);
 
-			if (currentFruit->aEffacer) {
-				numberOfFruits--;
-				delete currentFruit;
-				currentFruit = fruits[fruits.size() - 1];
-				fruits.pop_back();
-				for (fruit* f : fruits)
-				{
-					if (f->aEffacer)
-					{
-						fruits.erase(std::remove_if(fruits.begin(), fruits.end(), [](fruit* f) { return f->aEffacer; }), fruits.end());
-						delete f;
-						f = nullptr;
-					}
-				}
-				break;
+	/*for (int i = 830; i > 100; i--) {
+		for (fruit* f : fruits)
+		{
+			if (f == currentFruit)
+				continue;
+			if (f->y == i) {
+				f->setFalling(true);
+				f->setFall(false);
+				DoFall(f);
 			}
-			draw();
 		}
-	}
+	}*/
 
 	if (currentFruit->getIsFall())
 	{
 		fruits.push_back(currentFruit);
 		currentFruit = getRandomFruit(numberOfFruits);
-
 		numberOfFruits++;
 	}
 
-	draw();
+}
+
+void game::DoFall(fruit* fallenFruit)
+{
+	while (!fallenFruit->getIsFall() && fallenFruit->getIsFalling()) {
+		fallenFruit->fall(fruits);
+
+		if (fallenFruit->aEffacer) {
+			numberOfFruits--;
+			delete fallenFruit;
+			fallenFruit = fruits[fruits.size() - 1];
+			fruits.pop_back();
+			currentFruit = fallenFruit;
+			for (fruit* f : fruits)
+			{
+				if (f->aEffacer)
+				{
+					fruits.erase(std::remove(fruits.begin(), fruits.end(), f), fruits.end());
+					delete f;
+					f = nullptr;
+				}
+			}
+		}
+		mydroppeur->updateX();
+		draw();
+	}
 }
 
 fruit* game::getRandomFruit(int f) {

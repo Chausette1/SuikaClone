@@ -1,12 +1,14 @@
+#pragma once
+
 #include "melon.h"
 
 melon::melon() : fruit() {
 	radius = 110;
-	sprite = LoadTexture("resources/img/circle9.png");
+	sprite = game::sprite9;
 }
 
 melon::~melon() {
-	UnloadTexture(sprite);
+	fruit::~fruit();
 }
 
 fruit* melon::Fusion(fruit* otherFruit) {

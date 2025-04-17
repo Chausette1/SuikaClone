@@ -20,111 +20,140 @@ fruit::~fruit()
 }
 
 void fruit::ManageFruitOverlap() {
-	while (IsColliding(currentCollision))
+	if (currentCollision == nullptr)
 	{
-		y--;
-	}
-	y++;
-}
-
-void fruit::ManageFruitXCollision() {
-	if (x == currentCollision->x) {
-		isFall = true;
-		isFalling = false;
 		return;
 	}
+	if (y < currentCollision->y) {
+
+		while (IsColliding(currentCollision))
+		{
+			y--;
+		}
+		y--;
+	}
+	else {
+		currentCollision->ManageFruitOverlap();
+	}
+}
+
+bool fruit::ManageFruitXCollision() {
+	if (x == currentCollision->x) {
+		EndFall();
+		return true;
+	}
 	else if (x > currentCollision->x) {
+		x++;
 		x++;
 		angle += 5;
 	}
 	else {
 		x--;
+		x--;
 		angle -= 5;
 	}
+	return false;
 }
 
 void fruit::CheckIfHitBoxesAreHit() {
-	if (CheckCollisionCircleRec(Vector2{ (float)x, (float)y }, radius, leftEdge) ||
-		CheckCollisionCircleRec(Vector2{ (float)x, (float)y }, radius, RightEdge) ||
-		CheckCollisionCircleRec(Vector2{ (float)x, (float)y }, radius, BottomEdge))
+	if (y + radius >= 830)
 	{
-		isFall = true;
-		isFalling = false;
+		y = 830 - radius;
+		EndFall();
+		return;
+	}
+	if (CheckCollisionCircleRec(Vector2{ (float)x, (float)y }, radius, leftEdge)) {
+		x++;
+		EndFall();
+		return;
+	}
+	else if (CheckCollisionCircleRec(Vector2{ (float)x, (float)y }, radius, RightEdge)) {
+		x--;
+		EndFall();
 		return;
 	}
 }
 
-void fruit::ManageMultipleCollision(fruit* newCollision, std::vector<fruit*> listFruits) {
-	Collision = true;
-	currentCollision = newCollision;
-	for (fruit* oldCollision : listFruits)
+void fruit::EndFall()
+{
+	isFall = true;
+	isFalling = false;
+	currentCollision = nullptr;
+	for (fruit* f : listCollision)
 	{
-		if (newCollision == oldCollision)
-		{
-			isFall = true;
-			isFalling = false;
-			return;
-		}
-		else
-		{
-			Collision = true;
-			currentCollision = newCollision;
-			listCollision.push_back(newCollision);
-		}
+		listCollision.erase(std::remove(listCollision.begin(), listCollision.end(), f), listCollision.end());
 	}
+	return;
 }
 
-void fruit::DoCollision(std::vector<fruit*> listFruits) {
+bool fruit::ManageCollision(fruit* newCollision) {
+	bool newCollisionInList = false;
+	for (fruit* oldCollision : listCollision)
 	{
-		ManageFruitOverlap();
-		ManageFruitXCollision();
-		CheckIfHitBoxesAreHit();
-		Collision = false;
-		for (fruit* potential_collision : listFruits)
+		if (oldCollision == newCollision)
 		{
-			if (potential_collision == currentCollision)
-			{
-				continue;
-			}
-			if (IsColliding(potential_collision))
-			{
-				bool IsFusion = DoFusion(potential_collision, listFruits);
-				if (IsFusion)
-				{
-					return;
-				}
-				ManageMultipleCollision(potential_collision, listFruits);
-
-			}
+			newCollisionInList = true;
+			break;
 		}
+	}
+	if (!newCollisionInList)
+	{
+		std::cout << newCollision << std::endl;
+		currentCollision = newCollision;
+		std::cout << currentCollision << std::endl;
+		std::cout << "list colision : " << listCollision.size() << std::endl;
+		listCollision.push_back(newCollision);
+	}
+	else
+	{
+		std::cout << "déjà dans la liste" << std::endl;
+		if (currentCollision == newCollision)
+		{
+			std::cout << currentCollision << std::endl;
+			return false;
+		}
+		else {
+			EndFall();
+			return true;
+		}
+	}
+	return false;
+}
+
+void fruit::DoCollision(std::vector<fruit*> listFruits, fruit* f) {
+	{
+		if (ManageCollision(f))
+		{
+			return;
+		}
+		ManageFruitOverlap();
+		if (ManageFruitXCollision())
+		{
+			return;
+		}
+		CheckIfHitBoxesAreHit();
 	}
 }
 
 void fruit::fall(std::vector<fruit*>& listFruits)
 {
 	//make hitbox
-
-	isFalling = true;
-	draw();
-	y += speed;
+	y += 1;
 	CheckIfHitBoxesAreHit();
-	if (!Collision) {
-		for (fruit* f : listFruits) {
-			if (IsColliding(f))
-			{
-				Collision = true;
-				currentCollision = f;
-				listCollision.push_back(f);
-				bool IsFusion = DoFusion(f, listFruits);
-				if (IsFusion)
-				{
-					return;
-				}
-			}
+	for (fruit* f : listFruits) {
+		if (f == this)
+		{
+			continue;
 		}
-	}
-	if (Collision) {
-		DoCollision(listFruits);
+		if (IsColliding(f))
+		{
+			bool IsFusion = DoFusion(f, listFruits);
+			if (IsFusion)
+			{
+				return;
+			}
+			DoCollision(listFruits, f);
+		}
 	}
 }
 
@@ -158,9 +187,14 @@ bool fruit::getIsFalling()
 	return isFalling;
 }
 
-void fruit::setFall(bool fall)
+void fruit::setFalling(bool fall)
 {
 	isFalling = fall;
+}
+
+void fruit::setFall(bool fall)
+{
+	isFall = fall;
 }
 
 bool fruit::getIsFall()
