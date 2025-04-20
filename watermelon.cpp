@@ -13,6 +13,6 @@ watermelon::~watermelon()
 {
 	fruit::~fruit();
 }
-fruit* watermelon::Fusion(fruit* otherFruit) {
+std::shared_ptr<fruit> watermelon::Fusion(std::shared_ptr<fruit> otherFruit) {
 	return nullptr;
 }

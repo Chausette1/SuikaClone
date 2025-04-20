@@ -7,5 +7,5 @@ class melon : public fruit {
 public:
 	melon();
 	~melon();
-	virtual fruit* Fusion(fruit* otherFruit) override;
+	virtual std::shared_ptr<fruit> Fusion(std::shared_ptr<fruit> otherFruit) override;
 };

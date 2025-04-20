@@ -5,7 +5,7 @@
 int main()
 {
 	InitWindow(800, 900, "Hello World");
-	SetTargetFPS(1000);
+	SetTargetFPS(600);
 
 	game* mygame = new game(800, 900);
 	bool IsMousePressed = false;
@@ -13,7 +13,6 @@ int main()
 	while (!WindowShouldClose())
 	{
 		mygame->update();
-		mygame->draw();
 	}
 
 	CloseWindow();

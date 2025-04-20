@@ -12,13 +12,10 @@ raisin::~raisin()
 {
 	fruit::~fruit();
 }
-fruit* raisin::Fusion(fruit* otherFruit) {
-	raisin* other = dynamic_cast<raisin*>(otherFruit);
-
-	int newX = (x + other->x) / 2;
-	int newY = (y + other->y) / 2;
-	std::cout << "on créee une madarine" << std::endl;
-	fruit* newFruit = new mandarine();
+std::shared_ptr<fruit> raisin::Fusion(std::shared_ptr<fruit> otherFruit) {
+	int newX = (x + otherFruit->x) / 2;
+	int newY = (y + otherFruit->y) / 2;
+	std::shared_ptr<fruit> newFruit = std::make_shared<mandarine>();
 	newFruit->x = newX;
 	newFruit->y = newY;
 	return newFruit;

@@ -11,13 +11,10 @@ melon::~melon() {
 	fruit::~fruit();
 }
 
-fruit* melon::Fusion(fruit* otherFruit) {
-	melon* other = dynamic_cast<melon*>(otherFruit);
-
-
-	int newX = (x + other->x) / 2;
-	int newY = (y + other->y) / 2;
-	fruit* newFruit = new watermelon();
+std::shared_ptr<fruit> melon::Fusion(std::shared_ptr<fruit> otherFruit) {
+	int newX = (x + otherFruit->x) / 2;
+	int newY = (y + otherFruit->y) / 2;
+	std::shared_ptr<fruit> newFruit = std::make_shared<watermelon>();
 	newFruit->x = newX;
 	newFruit->y = newY;
 	return newFruit;

@@ -24,8 +24,8 @@ game::game(int width, int height)
 	background = LoadTexture("resources/img/background.png");
 	box = LoadTexture("resources/img/box2.png");
 	mydroppeur = new droppeur();
-	currentFruit = getRandomFruit(numberOfFruits);
-	fruits = std::vector<fruit*>();
+	fruits = std::vector<std::shared_ptr<fruit>>();
+	lose = false;
 
 	sprite0 = LoadTexture("resources/img/circle0.png");
 	sprite1 = LoadTexture("resources/img/circle1.png");
@@ -38,6 +38,10 @@ game::game(int width, int height)
 	sprite8 = LoadTexture("resources/img/circle8.png");
 	sprite9 = LoadTexture("resources/img/circle9.png");
 	sprite10 = LoadTexture("resources/img/circle10.png");
+	currentFruit = getRandomFruit(numberOfFruits);
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	static std::uniform_int_distribution<> distrib(1, 100);
 }
 
 void game::drawBackground()
@@ -51,7 +55,7 @@ void game::drawBackground()
 bool game::checkIfFruitIsFall()
 {
 	bool result = false;
-	for (fruit* f : fruits)
+	for (std::shared_ptr<fruit> f : fruits)
 	{
 		if (f->getIsFalling())
 		{
@@ -64,7 +68,7 @@ bool game::checkIfFruitIsFall()
 
 void game::drawFruits()
 {
-	for (fruit* f : fruits)
+	for (std::shared_ptr<fruit> f : fruits)
 	{
 		f->draw();
 	}
@@ -97,77 +101,88 @@ void game::draw()
 
 void game::update()
 {
-	while (!IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-		mydroppeur->updateX();
-		currentFruit->updateX();
-		draw();
-	}
-	currentFruit->setFalling(true);
-	DoFall(currentFruit);
-
-	/*for (int i = 830; i > 100; i--) {
-		for (fruit* f : fruits)
-		{
-			if (f == currentFruit)
-				continue;
-			if (f->y == i) {
-				f->setFalling(true);
-				f->setFall(false);
-				DoFall(f);
-			}
-		}
-	}*/
-
-	if (currentFruit->getIsFall())
+	if (!lose)
 	{
-		fruits.push_back(currentFruit);
-		currentFruit = getRandomFruit(numberOfFruits);
-		numberOfFruits++;
-	}
-
-}
-
-void game::DoFall(fruit* fallenFruit)
-{
-	while (!fallenFruit->getIsFall() && fallenFruit->getIsFalling()) {
-		fallenFruit->fall(fruits);
-
-		if (fallenFruit->aEffacer) {
-			numberOfFruits--;
-			delete fallenFruit;
-			fallenFruit = fruits[fruits.size() - 1];
-			fruits.pop_back();
-			currentFruit = fallenFruit;
-			for (fruit* f : fruits)
-			{
-				if (f->aEffacer)
-				{
-					fruits.erase(std::remove(fruits.begin(), fruits.end(), f), fruits.end());
-					delete f;
-					f = nullptr;
-				}
-			}
+		while (!IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+			mydroppeur->updateX();
+			currentFruit->updateX();
+			draw();
 		}
-		mydroppeur->updateX();
-		draw();
-	}
-}
+		currentFruit->setFalling(true);
+		DoFall(currentFruit);
 
-fruit* game::getRandomFruit(int f) {
-	int random = (rand() % 100) + 1;
-	if (random < 40) {
-		return new cerise();
-	}
-	else if (random < 75) {
-		return new fraise();
-	}
-	else if (random < 90) {
-		return new raisin();
-	}
-	else if (random < 95) {
-		return new mandarine();
+		if (currentFruit->y < 280) {
+			lose = true;
+			std::cout << "game lose" << std::endl;
+		}
+
+		if (currentFruit->getIsFall())
+		{
+			fruits.push_back(currentFruit);
+			currentFruit = getRandomFruit(numberOfFruits);
+			numberOfFruits++;
+		}
 	}
 	else {
-		return new orange();
+		drawLose();
 	}
+}
+
+void game::DoFall(std::shared_ptr<fruit> fallenFruit) {
+	std::vector<std::shared_ptr<fruit>> toDelete;
+	while (!fallenFruit->getIsFall() && fallenFruit->getIsFalling()) {
+		fallenFruit->fall(fruits);
+		// Si le fruit s'autodétruit pendant la chute
+		if (fallenFruit->aEffacer) {
+			numberOfFruits--;
+
+			// Marquer pour suppression
+			toDelete.push_back(fallenFruit);
+			for (std::shared_ptr<fruit> f : fruits) {
+				if (f->aEffacer) {
+					toDelete.push_back(f);
+					numberOfFruits--;
+				}
+			}
+			// On nettoie
+			for (std::shared_ptr<fruit> f : toDelete) {
+				fruits.erase(std::remove(fruits.begin(), fruits.end(), f), fruits.end());
+			}
+			toDelete.clear();
+			if (!fruits.empty()) {
+				fallenFruit = fruits.back();
+				currentFruit = fallenFruit;
+				fruits.pop_back();
+			}
+		}
+		mydroppeur->updateX();
+		draw();
+	}
+}
+
+
+std::shared_ptr<fruit> game::getRandomFruit(int f) {
+	int random = distrib(gen);
+	if (random < 40) {
+		return std::make_shared<cerise>();
+	}
+	else if (random < 75) {
+		return std::make_shared<fraise>();
+	}
+	else if (random < 90) {
+		return std::make_shared<raisin>();
+	}
+	else if (random < 95) {
+		return std::make_shared<mandarine>();
+	}
+	else {
+		return std::make_shared<orange>();
+	}
+}
+
+void game::drawLose()
+{
+	BeginDrawing();
+	DrawText("PERDU.", screenWidth / 2 - 30, screenHeight / 2 - 30, 60, BLACK);
+	EndDrawing();
 }

@@ -16,28 +16,41 @@ fruit::fruit()
 
 fruit::~fruit()
 {
-	this->currentCollision = nullptr;
+	currentCollision = nullptr;
 }
 
-void fruit::ManageFruitOverlap() {
-	if (currentCollision == nullptr)
+void fruit::ManageFruitOverlap(std::shared_ptr<fruit> fixedFruitCollision) {
+	bool asTopCollision = false;
+	for (std::shared_ptr<fruit> f : listCollision)
 	{
-		return;
-	}
-	if (y < currentCollision->y) {
-
-		while (IsColliding(currentCollision))
+		if (f == fixedFruitCollision)
+			continue;
+		if (y > f->y)
 		{
-			y--;
+			asTopCollision = true;
 		}
+	}
+	if (asTopCollision) {
+		for (std::shared_ptr<fruit> f : listCollision)
+		{
+			if (f == fixedFruitCollision)
+				continue;
+			if (y > f->y)
+				f->ManageCollision(shared_from_this());
+		}
+	}
+	while (IsColliding(fixedFruitCollision))
+	{
 		y--;
 	}
-	else {
-		currentCollision->ManageFruitOverlap();
-	}
+	y--;
 }
 
 bool fruit::ManageFruitXCollision() {
+	if (currentCollision == nullptr)
+	{
+		return false;
+	}
 	if (x == currentCollision->x) {
 		EndFall();
 		return true;
@@ -79,16 +92,16 @@ void fruit::EndFall()
 	isFall = true;
 	isFalling = false;
 	currentCollision = nullptr;
-	for (fruit* f : listCollision)
+	for (auto f : listCollision)
 	{
-		listCollision.erase(std::remove(listCollision.begin(), listCollision.end(), f), listCollision.end());
+		f = nullptr;
 	}
 	return;
 }
 
-bool fruit::ManageCollision(fruit* newCollision) {
+bool fruit::ManageCollision(std::shared_ptr<fruit> newCollision) {
 	bool newCollisionInList = false;
-	for (fruit* oldCollision : listCollision)
+	for (std::shared_ptr<fruit> oldCollision : listCollision)
 	{
 		if (oldCollision == newCollision)
 		{
@@ -98,18 +111,13 @@ bool fruit::ManageCollision(fruit* newCollision) {
 	}
 	if (!newCollisionInList)
 	{
-		std::cout << newCollision << std::endl;
 		currentCollision = newCollision;
-		std::cout << currentCollision << std::endl;
-		std::cout << "list colision : " << listCollision.size() << std::endl;
 		listCollision.push_back(newCollision);
 	}
 	else
 	{
-		std::cout << "déjà dans la liste" << std::endl;
 		if (currentCollision == newCollision)
 		{
-			std::cout << currentCollision << std::endl;
 			return false;
 		}
 		else {
@@ -120,28 +128,30 @@ bool fruit::ManageCollision(fruit* newCollision) {
 	return false;
 }
 
-void fruit::DoCollision(std::vector<fruit*> listFruits, fruit* f) {
+void fruit::DoCollision(std::vector<std::shared_ptr<fruit>> listFruits, std::shared_ptr<fruit> collision) {
 	{
-		if (ManageCollision(f))
+		if (ManageCollision(collision))
 		{
 			return;
 		}
-		ManageFruitOverlap();
-		if (ManageFruitXCollision())
-		{
-			return;
+		if (collision) {
+			ManageFruitOverlap(collision);
+			if (ManageFruitXCollision())
+			{
+				return;
+			}
+			CheckIfHitBoxesAreHit();
 		}
-		CheckIfHitBoxesAreHit();
 	}
 }
 
-void fruit::fall(std::vector<fruit*>& listFruits)
+void fruit::fall(std::vector<std::shared_ptr<fruit>>& listFruits)
 {
 	//make hitbox
 	y += 1;
 	CheckIfHitBoxesAreHit();
-	for (fruit* f : listFruits) {
-		if (f == this)
+	for (std::shared_ptr<fruit> f : listFruits) {
+		if (f == shared_from_this())
 		{
 			continue;
 		}
@@ -157,16 +167,18 @@ void fruit::fall(std::vector<fruit*>& listFruits)
 	}
 }
 
-bool fruit::DoFusion(fruit* f, std::vector<fruit*>& listFruits)
+bool fruit::DoFusion(std::shared_ptr<fruit> f, std::vector<std::shared_ptr<fruit>>& listFruits)
 {
 	if (IsFusion(f))
 	{
-		fruit* newFruit = Fusion(f);
-		newFruit->isFalling = true;
-		this->aEffacer = true;
+		std::shared_ptr<fruit> newFruit = Fusion(f);
+		shared_from_this()->aEffacer = true;
 		f->aEffacer = true;
-		listFruits.push_back(newFruit);
-		listCollision.erase(std::remove(listCollision.begin(), listCollision.end(), f), listCollision.end());
+		if (newFruit)
+		{
+			listFruits.push_back(newFruit);
+			newFruit->isFalling = true;
+		}
 		return true;
 	}
 	return false;
@@ -221,14 +233,20 @@ void fruit::updateX()
 	}
 }
 
-bool fruit::IsColliding(fruit* otherFruit)
+bool fruit::IsColliding(std::shared_ptr<fruit> otherFruit)
 {
 	Vector2 myPos = { (float)x, (float)y };
 	Vector2 otherPos = { (float)otherFruit->x, (float)otherFruit->y };
 	return CheckCollisionCircles(myPos, (float)radius, otherPos, (float)otherFruit->radius);
 }
 
-bool fruit::IsFusion(fruit* otherFruit) {
-	return typeid(*this) == typeid(*otherFruit);
+bool fruit::IsFusion(std::shared_ptr<fruit> otherFruit) {
+	return typeid(*shared_from_this()) == typeid(*otherFruit);
 
+}
+
+std::shared_ptr<fruit> fruit::Fusion(std::shared_ptr<fruit> otherFruit)
+{
+	std::cout << "pas normal" << std::endl;
+	return std::shared_ptr<fruit>(nullptr);
 }

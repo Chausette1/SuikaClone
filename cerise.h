@@ -8,6 +8,6 @@ class cerise : public fruit
 public:
 	cerise();
 	~cerise();
-	virtual fruit* Fusion(fruit* otherFruit) override;
+	virtual std::shared_ptr<fruit> Fusion(std::shared_ptr<fruit> otherFruit) override;
 };
 

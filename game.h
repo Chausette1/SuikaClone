@@ -14,6 +14,9 @@
 #include "ananas.h"
 #include "melon.h"
 #include "watermelon.h"
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
 
 class game
 {
@@ -21,12 +24,12 @@ public:
 	Texture2D background;
 	Texture2D box;
 	droppeur* mydroppeur;
-	fruit* currentFruit;
-	std::vector<fruit*> fruits;
+	std::shared_ptr<fruit> currentFruit;
+	std::vector<std::shared_ptr<fruit>> fruits;
 	game(int width, int height);
 	void update();
 	void draw();
-	void DoFall(fruit* fallenFruit);
+	void DoFall(std::shared_ptr<fruit> fallenFruit);
 	static Texture2D sprite0;
 	static Texture2D sprite1;
 	static Texture2D sprite2;
@@ -45,10 +48,14 @@ private:
 	int screenHeight;
 	int boxWidth;
 	int boxHeight;
+	bool lose;
 	void drawFruits();
 	void drawDroppeur();
 	void drawBackground();
 	void drawBox();
 	bool checkIfFruitIsFall();
-	fruit* getRandomFruit(int f);
+	std::shared_ptr<fruit> getRandomFruit(int f);
+	void drawLose();
+	std::mt19937 gen;
+	std::uniform_int_distribution<> distrib;
 };

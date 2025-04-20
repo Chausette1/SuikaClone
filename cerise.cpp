@@ -10,13 +10,10 @@ cerise::cerise() : fruit()
 cerise::~cerise() {
 	fruit::~fruit();
 }
-fruit* cerise::Fusion(fruit* otherFruit) {
-	cerise* other = dynamic_cast<cerise*>(otherFruit);
-
-
-	int newX = (x + other->x) / 2;
-	int newY = (y + other->y) / 2;
-	fruit* newFruit = new fraise();
+std::shared_ptr<fruit> cerise::Fusion(std::shared_ptr<fruit> otherFruit) {
+	int newX = (x + otherFruit->x) / 2;
+	int newY = (y + otherFruit->y) / 2;
+	std::shared_ptr<fruit> newFruit = std::make_shared<fraise>();
 	newFruit->x = newX;
 	newFruit->y = newY;
 	return newFruit;

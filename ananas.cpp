@@ -12,13 +12,10 @@ ananas::~ananas()
 {
 	fruit::~fruit();
 }
-fruit* ananas::Fusion(fruit* otherFruit) {
-	ananas* other = dynamic_cast<ananas*>(otherFruit);
-
-
-	int newX = (x + other->x) / 2;
-	int newY = (y + other->y) / 2;
-	fruit* newFruit = new melon();
+std::shared_ptr<fruit> ananas::Fusion(std::shared_ptr<fruit> otherFruit) {
+	int newX = (x + otherFruit->x) / 2;
+	int newY = (y + otherFruit->y) / 2;
+	std::shared_ptr<fruit> newFruit = std::make_shared<melon>();
 	newFruit->x = newX;
 	newFruit->y = newY;
 	return newFruit;

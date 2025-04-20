@@ -3,7 +3,10 @@
 #include <iostream>
 #include <vector>
 #include <cstdlib>
+#include <memory>
+#include <random>
 #include "raylib.h"
+
 //#include "droppeur.h"
 //#include "fruit.h"
 //#include "game.h"
