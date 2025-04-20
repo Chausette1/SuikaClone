@@ -4,7 +4,7 @@
 #include "game.h"
 
 mandarine::mandarine() : fruit() {
-	radius = 30;
+	radius = 40;
 	sprite = game::sprite3;
 	type = "mandarine";
 }

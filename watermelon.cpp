@@ -7,6 +7,7 @@ watermelon::watermelon() : fruit()
 {
 	radius = 130;
 	sprite = game::sprite10;
+	type = "watermelon";
 }
 
 watermelon::~watermelon()

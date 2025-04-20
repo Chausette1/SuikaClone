@@ -7,6 +7,7 @@ ananas::ananas() : fruit()
 {
 	radius = 110;
 	sprite = game::sprite8;
+	type = "ananas";
 }
 ananas::~ananas()
 {

@@ -4,7 +4,7 @@
 #include "game.h"
 
 pomme::pomme() : fruit() {
-	radius = 40;
+	radius = 65;
 	sprite = game::sprite5;
 	type = "pomme";
 }

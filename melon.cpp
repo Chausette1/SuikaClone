@@ -3,8 +3,9 @@
 #include "melon.h"
 
 melon::melon() : fruit() {
-	radius = 110;
+	radius = 120;
 	sprite = game::sprite9;
+	type = "melon";
 }
 
 melon::~melon() {
