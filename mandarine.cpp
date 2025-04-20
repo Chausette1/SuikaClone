@@ -4,8 +4,9 @@
 #include "game.h"
 
 mandarine::mandarine() : fruit() {
-	radius = 40;
+	radius = 30;
 	sprite = game::sprite3;
+	type = "mandarine";
 }
 
 mandarine::~mandarine() {

@@ -5,8 +5,9 @@
 
 raisin::raisin() : fruit()
 {
-	radius = 30;
+	radius = 25;
 	sprite = game::sprite2;
+	type = "raisin";
 }
 raisin::~raisin()
 {

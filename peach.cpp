@@ -4,8 +4,9 @@
 #include "game.h"
 
 peach::peach() : fruit() {
-	radius = 80;
-	sprite = game::sprite6;
+	radius = 50;
+	sprite = game::sprite7;
+	type = "peach";
 }
 
 peach::~peach() {

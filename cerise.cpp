@@ -6,6 +6,7 @@ cerise::cerise() : fruit()
 {
 	radius = 15;
 	sprite = game::sprite0;
+	type = "cerise";
 }
 cerise::~cerise() {
 	fruit::~fruit();

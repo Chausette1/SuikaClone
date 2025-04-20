@@ -134,6 +134,7 @@
     <ClCompile Include="fraise.cpp" />
     <ClCompile Include="fruit.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="game_state_recorder.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mandarine.cpp" />
     <ClCompile Include="melon.cpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="fraise.h" />
     <ClInclude Include="fruit.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="game_state_recorder.h" />
     <ClInclude Include="include.h" />
     <ClInclude Include="mandarine.h" />
     <ClInclude Include="melon.h" />

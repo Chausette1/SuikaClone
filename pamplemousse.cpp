@@ -4,8 +4,9 @@
 #include "game.h"
 
 pamplemousse::pamplemousse() : fruit() {
-	radius = 95;
-	sprite = game::sprite7;
+	radius = 45;
+	sprite = game::sprite6;
+	type = "pamplemousse";
 }
 
 pamplemousse::~pamplemousse() {

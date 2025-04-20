@@ -1,7 +1,7 @@
 #pragma once
 
 #include "game.h"
-// D�finition des variables statiques de sprites
+// Définition des variables statiques de sprites
 Texture2D game::sprite0;
 Texture2D game::sprite1;
 Texture2D game::sprite2;
@@ -86,7 +86,7 @@ void game::drawBackground()
 {
 	Rectangle sourceRec = { 0.0f, 0.0f, static_cast<float>(background.width), static_cast<float>(background.height) };
 	Rectangle destRec = { 0.0f, 0.0f, static_cast<float>(screenWidth), static_cast<float>(screenHeight) };
-	Vector2 origin = { 0,0 };
+	Vector2 origin = { 0.0f, 0.0f };
 	DrawTexturePro(background, sourceRec, destRec, origin, 0.0f, WHITE);
 }
 
@@ -106,8 +106,8 @@ void game::drawDroppeur()
 
 void game::drawBox()
 {
-	Rectangle sourceRec = { 0.0f, 0.0f, box.width, box.height };
-	Rectangle destRec = { 100.0f, 100.0f, boxWidth, boxHeight };
+	Rectangle sourceRec = { 0.0f, 0.0f, static_cast<float>(box.width), static_cast<float>(box.height) };
+	Rectangle destRec = { 100.0f, 100.0f, static_cast<float>(boxWidth), static_cast<float>(boxHeight) };
 	Vector2 origin = { 0.0f, 0.0f };
 	DrawTexturePro(box, sourceRec, destRec, origin, 0.0f, WHITE);
 }
@@ -130,13 +130,11 @@ void game::update()
 {
 	if (!lose)
 	{
-		/*while (!IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-			mydroppeur->updateX();
-			currentFruit->updateX();
-			draw();
-		}*/
-		int mouseX = 180 + (distrib(gen) * 4) + (distrib(gen) / 10 * 4);
-		currentFruit->x = mouseX;
+		float mouseX = static_cast<float>(180 + (distrib(gen) * 4) + (distrib(gen) / 10 * 4));
+		currentFruit->x = static_cast<int>(mouseX);
+
+		// Enregistrer l'état avant l'action
+		recordGameState(mouseX);
 
 		currentFruit->setFalling(true);
 		DoFall(currentFruit);
@@ -184,8 +182,8 @@ void game::DoFall(std::shared_ptr<fruit> fallenFruit) {
 			}
 		}
 		mydroppeur->updateX();
-		draw();
 	}
+	draw();
 }
 
 
@@ -211,6 +209,100 @@ std::shared_ptr<fruit> game::getRandomFruit(int f) {
 void game::drawLose()
 {
 	BeginDrawing();
-	DrawText("PERDU.", screenWidth / 2 - 30, screenHeight / 2 - 30, 60, BLACK);
+	DrawText("PERDU.", static_cast<int>(screenWidth / 2 - 30), static_cast<int>(screenHeight / 2 - 30), 60, BLACK);
 	EndDrawing();
+}
+
+void game::recordGameState(float actionX) {
+	GameRecord record;
+	
+	// Game area
+	record.game_area.x_min = 0;
+	record.game_area.x_max = screenWidth;
+	record.game_area.y_min = 0;
+	record.game_area.y_max = screenHeight;
+	
+	// Current state
+	record.state = getCurrentGameState();
+	
+	// Action
+	record.action.x = actionX;
+	
+	// Next state
+	record.next_state = getNextGameState();
+	
+	// Reward
+	record.reward = calculateReward();
+	
+	// Done
+	record.done = isGameDone();
+	
+	// Enregistrer l'état
+	auto& recorder = GameStateRecorder::getInstance();
+	recorder.recordGameState(record);
+	recorder.saveToFile("game_records.json");
+}
+
+GameState game::getCurrentGameState() const {
+	GameState state;
+	
+	// Liste des fruits actuels
+	for (const auto& fruit : fruits) {
+		FruitInfo fruitInfo;
+		fruitInfo.type = fruit->getType();
+		fruitInfo.x = static_cast<float>(fruit->x);
+		fruitInfo.y = static_cast<float>(fruit->y);
+		fruitInfo.radius = fruit->getRadius();
+		state.list_fruit.push_back(fruitInfo);
+	}
+	
+	// Fruit actuel
+	if (currentFruit) {
+		state.current_fruit.type = currentFruit->getType();
+		state.current_fruit.x = static_cast<float>(currentFruit->x);
+		state.current_fruit.y = static_cast<float>(currentFruit->y);
+		state.current_fruit.radius = currentFruit->getRadius();
+	}
+	
+	// Prochain fruit
+	state.next_fruit = state.current_fruit;
+	
+	return state;
+}
+
+GameState game::getNextGameState() const {
+	GameState state;
+	
+	// Copier l'état actuel
+	state = getCurrentGameState();
+	
+	// Ajouter le fruit actuel à la liste des fruits
+	if (currentFruit) {
+		FruitInfo fruitInfo;
+		fruitInfo.type = currentFruit->getType();
+		fruitInfo.x = static_cast<float>(currentFruit->x);
+		fruitInfo.y = static_cast<float>(currentFruit->y);
+		fruitInfo.radius = currentFruit->getRadius();
+		state.list_fruit.push_back(fruitInfo);
+	}
+	
+	// Mettre à jour le fruit actuel avec le prochain fruit
+	if (currentFruit) {
+		state.current_fruit = state.next_fruit;
+	}
+	
+	return state;
+}
+
+int game::calculateReward() const {
+	// Logique de récompense à implémenter
+	// Par exemple:
+	// - Points pour les fusions
+	// - Pénalité pour game over
+	// - Bonus pour les combos
+	return score;
+}
+
+bool game::isGameDone() const {
+	return lose;
 }

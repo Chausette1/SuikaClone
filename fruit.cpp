@@ -12,6 +12,9 @@ fruit::fruit()
 	Collision = false;
 	currentCollision = nullptr;
 	aEffacer = false;
+	type = "fruit";
+	radius = 0;
+	sprite = {};
 }
 
 fruit::~fruit()
@@ -75,12 +78,12 @@ void fruit::CheckIfHitBoxesAreHit() {
 		EndFall();
 		return;
 	}
-	if (CheckCollisionCircleRec(Vector2{ (float)x, (float)y }, radius, leftEdge)) {
+	if (CheckCollisionCircleRec(Vector2{ static_cast<float>(x), static_cast<float>(y) }, static_cast<float>(radius), leftEdge)) {
 		x++;
 		EndFall();
 		return;
 	}
-	else if (CheckCollisionCircleRec(Vector2{ (float)x, (float)y }, radius, RightEdge)) {
+	else if (CheckCollisionCircleRec(Vector2{ static_cast<float>(x), static_cast<float>(y) }, static_cast<float>(radius), RightEdge)) {
 		x--;
 		EndFall();
 		return;
@@ -183,11 +186,11 @@ bool fruit::DoFusion(std::shared_ptr<fruit> f, std::vector<std::shared_ptr<fruit
 
 void fruit::draw()
 {
-	DrawCircle(x, y, radius, BLUE);
-	Rectangle sourceRec = { 0.0f, 0.0f, (float)sprite.width, (float)sprite.height };
-	Rectangle destRec = { (float)(x), (float)(y), radius * 2, radius * 2 };
-	Vector2 origin = { radius,radius };
-	DrawTexturePro(sprite, sourceRec, destRec, origin, float(angle), WHITE);
+	DrawCircle(x, y, static_cast<float>(radius), BLUE);
+	Rectangle sourceRec = { 0.0f, 0.0f, static_cast<float>(sprite.width), static_cast<float>(sprite.height) };
+	Rectangle destRec = { static_cast<float>(x), static_cast<float>(y), static_cast<float>(radius * 2), static_cast<float>(radius * 2) };
+	Vector2 origin = { static_cast<float>(radius), static_cast<float>(radius) };
+	DrawTexturePro(sprite, sourceRec, destRec, origin, static_cast<float>(angle), WHITE);
 }
 
 bool fruit::getIsFalling()
@@ -231,9 +234,9 @@ void fruit::updateX()
 
 bool fruit::IsColliding(std::shared_ptr<fruit> otherFruit)
 {
-	Vector2 myPos = { (float)x, (float)y };
-	Vector2 otherPos = { (float)otherFruit->x, (float)otherFruit->y };
-	return CheckCollisionCircles(myPos, (float)radius, otherPos, (float)otherFruit->radius);
+	Vector2 myPos = { static_cast<float>(x), static_cast<float>(y) };
+	Vector2 otherPos = { static_cast<float>(otherFruit->x), static_cast<float>(otherFruit->y) };
+	return CheckCollisionCircles(myPos, static_cast<float>(radius), otherPos, static_cast<float>(otherFruit->radius));
 }
 
 bool fruit::IsFusion(std::shared_ptr<fruit> otherFruit) {

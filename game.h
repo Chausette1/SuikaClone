@@ -14,6 +14,7 @@
 #include "ananas.h"
 #include "melon.h"
 #include "watermelon.h"
+#include "game_state_recorder.h"
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
@@ -60,4 +61,11 @@ private:
 	void drawLose();
 	std::mt19937 gen;
 	std::uniform_int_distribution<> distrib;
+
+	// Nouvelles fonctions pour l'enregistrement des états
+	void recordGameState(float actionX);
+	GameState getCurrentGameState() const;
+	GameState getNextGameState() const;
+	int calculateReward() const;
+	bool isGameDone() const;
 };

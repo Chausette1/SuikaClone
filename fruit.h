@@ -27,6 +27,7 @@ protected:
 	std::shared_ptr<fruit> currentCollision;
 	std::vector<std::shared_ptr<fruit>> listCollision;
 	fruit();
+	std::string type;
 
 public:
 	void virtual draw();
@@ -45,4 +46,6 @@ public:
 	int y;
 	virtual ~fruit();
 	bool aEffacer;
+	virtual std::string getType() const { return type; }
+	virtual int getRadius() const { return radius; }
 };
