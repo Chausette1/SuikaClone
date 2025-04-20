@@ -30,7 +30,7 @@ protected:
 
 public:
 	void virtual draw();
-	void virtual fall(std::vector<std::shared_ptr<fruit>>& listFruits);
+	void virtual fall(std::vector<std::shared_ptr<fruit>>& listFruits, int& score);
 	bool virtual getIsFalling();
 	void virtual setFalling(bool fall);
 	void virtual setFall(bool fall);
@@ -38,8 +38,8 @@ public:
 	void virtual updateX();
 	bool virtual IsColliding(std::shared_ptr<fruit> otherFruit);
 	bool virtual IsFusion(std::shared_ptr<fruit> otherFruit);
-	virtual std::shared_ptr<fruit> Fusion(std::shared_ptr<fruit> otherFruit);
-	bool virtual DoFusion(std::shared_ptr<fruit> f, std::vector<std::shared_ptr<fruit>>& listFruits);
+	virtual std::shared_ptr<fruit> Fusion(std::shared_ptr<fruit> otherFruit, int& score);
+	bool virtual DoFusion(std::shared_ptr<fruit> f, std::vector<std::shared_ptr<fruit>>& listFruits, int& score);
 	void EndFall();
 	int x;
 	int y;

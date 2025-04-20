@@ -145,7 +145,7 @@ void fruit::DoCollision(std::vector<std::shared_ptr<fruit>>& listFruits, std::sh
 	}
 }
 
-void fruit::fall(std::vector<std::shared_ptr<fruit>>& listFruits)
+void fruit::fall(std::vector<std::shared_ptr<fruit>>& listFruits, int& score)
 {
 	//make hitbox
 	y += 1;
@@ -153,7 +153,7 @@ void fruit::fall(std::vector<std::shared_ptr<fruit>>& listFruits)
 	for (std::shared_ptr<fruit> f : listFruits) {
 		if (IsColliding(f))
 		{
-			bool IsFusion = DoFusion(f, listFruits);
+			bool IsFusion = DoFusion(f, listFruits, score);
 			if (IsFusion)
 			{
 				return;
@@ -163,11 +163,11 @@ void fruit::fall(std::vector<std::shared_ptr<fruit>>& listFruits)
 	}
 }
 
-bool fruit::DoFusion(std::shared_ptr<fruit> f, std::vector<std::shared_ptr<fruit>>& listFruits)
+bool fruit::DoFusion(std::shared_ptr<fruit> f, std::vector<std::shared_ptr<fruit>>& listFruits, int& score)
 {
 	if (IsFusion(f))
 	{
-		std::shared_ptr<fruit> newFruit = Fusion(f);
+		std::shared_ptr<fruit> newFruit = Fusion(f, score);
 		shared_from_this()->aEffacer = true;
 		f->aEffacer = true;
 		if (newFruit)
@@ -241,7 +241,7 @@ bool fruit::IsFusion(std::shared_ptr<fruit> otherFruit) {
 
 }
 
-std::shared_ptr<fruit> fruit::Fusion(std::shared_ptr<fruit> otherFruit)
+std::shared_ptr<fruit> fruit::Fusion(std::shared_ptr<fruit> otherFruit, int& score)
 {
 	return std::shared_ptr<fruit>(nullptr);
 }

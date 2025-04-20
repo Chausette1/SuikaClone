@@ -50,6 +50,7 @@ private:
 	int screenHeight;
 	int boxWidth;
 	int boxHeight;
+	int score;
 	void drawFruits();
 	void drawDroppeur();
 	void drawBackground();

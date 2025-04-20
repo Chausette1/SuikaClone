@@ -17,6 +17,7 @@ Texture2D game::sprite10;
 game::game(int width, int height) : gen(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count())),
 distrib(1, 100)
 {
+	score = 0;
 	numberOfFruits = 0;
 	screenWidth = width;
 	screenHeight = height;
@@ -64,7 +65,6 @@ game::~game()
 	UnloadTexture(sprite8);
 	UnloadTexture(sprite9);
 	UnloadTexture(sprite10);
-	CloseWindow();
 }
 
 
@@ -122,6 +122,7 @@ void game::draw()
 	drawFruits();
 	DrawText(TextFormat("FPS: %i", GetFPS()), 10, 10, 20, BLACK);
 	DrawText(TextFormat("Fruits: %i", fruits.size()), 10, 30, 20, BLACK);
+	DrawText(TextFormat("Score: %i", score), 10, 50, 20, BLACK);
 	EndDrawing();
 }
 
@@ -159,7 +160,7 @@ void game::update()
 void game::DoFall(std::shared_ptr<fruit> fallenFruit) {
 	std::vector<std::shared_ptr<fruit>> toDelete;
 	while (!fallenFruit->getIsFall() && fallenFruit->getIsFalling()) {
-		fallenFruit->fall(fruits);
+		fallenFruit->fall(fruits, score);
 		if (fallenFruit->aEffacer) {
 			numberOfFruits--;
 

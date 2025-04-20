@@ -4,7 +4,7 @@
 
 class peach : public fruit {
 public:
-    peach();
-    ~peach();
-   virtual std::shared_ptr<fruit> Fusion(std::shared_ptr<fruit> otherFruit) override;
+	peach();
+	~peach();
+	virtual std::shared_ptr<fruit> Fusion(std::shared_ptr<fruit> otherFruit, int& score) override;
 };
