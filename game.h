@@ -27,9 +27,11 @@ public:
 	std::shared_ptr<fruit> currentFruit;
 	std::vector<std::shared_ptr<fruit>> fruits;
 	game(int width, int height);
+	~game();
 	void update();
 	void draw();
 	void DoFall(std::shared_ptr<fruit> fallenFruit);
+	bool lose;
 	static Texture2D sprite0;
 	static Texture2D sprite1;
 	static Texture2D sprite2;
@@ -48,7 +50,6 @@ private:
 	int screenHeight;
 	int boxWidth;
 	int boxHeight;
-	bool lose;
 	void drawFruits();
 	void drawDroppeur();
 	void drawBackground();

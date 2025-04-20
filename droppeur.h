@@ -11,6 +11,7 @@ private:
 
 public:
 	droppeur();
+	~droppeur() { UnloadTexture(sprite); }
 	void updateX();
 	void draw() const;
 };

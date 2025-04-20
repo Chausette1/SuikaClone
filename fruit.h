@@ -6,10 +6,9 @@ class fruit : public std::enable_shared_from_this<fruit>
 {
 private:
 	void ManageFruitOverlap(std::shared_ptr<fruit> sender);
-	void DoCollision(std::vector<std::shared_ptr<fruit>> listFruits, std::shared_ptr<fruit> f);
+	void DoCollision(std::vector<std::shared_ptr<fruit>>& listFruits, std::shared_ptr<fruit> f);
 	bool ManageFruitXCollision();
 	void CheckIfHitBoxesAreHit();
-	void EndFall();
 	bool ManageCollision(std::shared_ptr<fruit> newCollision);
 	Rectangle leftEdge = { 19, 0 ,100, 1000 };
 	Rectangle RightEdge = { 679, 0 , 100, 1000 };
@@ -41,6 +40,7 @@ public:
 	bool virtual IsFusion(std::shared_ptr<fruit> otherFruit);
 	virtual std::shared_ptr<fruit> Fusion(std::shared_ptr<fruit> otherFruit);
 	bool virtual DoFusion(std::shared_ptr<fruit> f, std::vector<std::shared_ptr<fruit>>& listFruits);
+	void EndFall();
 	int x;
 	int y;
 	virtual ~fruit();

@@ -4,7 +4,7 @@
 
 int main()
 {
-	InitWindow(800, 900, "Hello World");
+	InitWindow(800, 900, "SuikaClone");
 	SetTargetFPS(600);
 
 	game* mygame = new game(800, 900);
@@ -13,6 +13,10 @@ int main()
 	while (!WindowShouldClose())
 	{
 		mygame->update();
+		if (mygame->lose)
+		{
+			mygame = new game(800, 900);
+		}
 	}
 
 	CloseWindow();

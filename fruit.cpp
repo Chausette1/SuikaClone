@@ -128,7 +128,7 @@ bool fruit::ManageCollision(std::shared_ptr<fruit> newCollision) {
 	return false;
 }
 
-void fruit::DoCollision(std::vector<std::shared_ptr<fruit>> listFruits, std::shared_ptr<fruit> collision) {
+void fruit::DoCollision(std::vector<std::shared_ptr<fruit>>& listFruits, std::shared_ptr<fruit> collision) {
 	{
 		if (ManageCollision(collision))
 		{
@@ -151,10 +151,6 @@ void fruit::fall(std::vector<std::shared_ptr<fruit>>& listFruits)
 	y += 1;
 	CheckIfHitBoxesAreHit();
 	for (std::shared_ptr<fruit> f : listFruits) {
-		if (f == shared_from_this())
-		{
-			continue;
-		}
 		if (IsColliding(f))
 		{
 			bool IsFusion = DoFusion(f, listFruits);
@@ -178,8 +174,8 @@ bool fruit::DoFusion(std::shared_ptr<fruit> f, std::vector<std::shared_ptr<fruit
 		{
 			listFruits.push_back(newFruit);
 			newFruit->isFalling = true;
+			return true;
 		}
-		return true;
 	}
 	return false;
 }
@@ -247,6 +243,5 @@ bool fruit::IsFusion(std::shared_ptr<fruit> otherFruit) {
 
 std::shared_ptr<fruit> fruit::Fusion(std::shared_ptr<fruit> otherFruit)
 {
-	std::cout << "pas normal" << std::endl;
 	return std::shared_ptr<fruit>(nullptr);
 }

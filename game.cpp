@@ -14,7 +14,8 @@ Texture2D game::sprite8;
 Texture2D game::sprite9;
 Texture2D game::sprite10;
 
-game::game(int width, int height)
+game::game(int width, int height) : gen(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count())),
+distrib(1, 100)
 {
 	numberOfFruits = 0;
 	screenWidth = width;
@@ -39,18 +40,33 @@ game::game(int width, int height)
 	sprite9 = LoadTexture("resources/img/circle9.png");
 	sprite10 = LoadTexture("resources/img/circle10.png");
 	currentFruit = getRandomFruit(numberOfFruits);
-	static std::random_device rd;
-	static std::mt19937 gen(rd());
-	static std::uniform_int_distribution<> distrib(1, 100);
 }
 
-void game::drawBackground()
+game::~game()
 {
-	Rectangle sourceRec = { 0.0f, 0.0f, static_cast<float>(background.width), static_cast<float>(background.height) };
-	Rectangle destRec = { 0.0f, 0.0f, static_cast<float>(screenWidth), static_cast<float>(screenHeight) };
-	Vector2 origin = { 0,0 };
-	DrawTexturePro(background, sourceRec, destRec, origin, 0.0f, WHITE);
+	for (std::shared_ptr<fruit> f : fruits)
+	{
+		f.reset();
+	}
+	fruits.clear();
+	delete mydroppeur;
+	mydroppeur = nullptr;
+	UnloadTexture(background);
+	UnloadTexture(box);
+	UnloadTexture(sprite0);
+	UnloadTexture(sprite1);
+	UnloadTexture(sprite2);
+	UnloadTexture(sprite3);
+	UnloadTexture(sprite4);
+	UnloadTexture(sprite5);
+	UnloadTexture(sprite6);
+	UnloadTexture(sprite7);
+	UnloadTexture(sprite8);
+	UnloadTexture(sprite9);
+	UnloadTexture(sprite10);
+	CloseWindow();
 }
+
 
 bool game::checkIfFruitIsFall()
 {
@@ -64,6 +80,14 @@ bool game::checkIfFruitIsFall()
 		}
 	}
 	return result;
+}
+
+void game::drawBackground()
+{
+	Rectangle sourceRec = { 0.0f, 0.0f, static_cast<float>(background.width), static_cast<float>(background.height) };
+	Rectangle destRec = { 0.0f, 0.0f, static_cast<float>(screenWidth), static_cast<float>(screenHeight) };
+	Vector2 origin = { 0,0 };
+	DrawTexturePro(background, sourceRec, destRec, origin, 0.0f, WHITE);
 }
 
 void game::drawFruits()
@@ -96,6 +120,8 @@ void game::draw()
 	drawBox();
 	drawDroppeur();
 	drawFruits();
+	DrawText(TextFormat("FPS: %i", GetFPS()), 10, 10, 20, BLACK);
+	DrawText(TextFormat("Fruits: %i", fruits.size()), 10, 30, 20, BLACK);
 	EndDrawing();
 }
 
@@ -103,17 +129,19 @@ void game::update()
 {
 	if (!lose)
 	{
-		while (!IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+		/*while (!IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
 			mydroppeur->updateX();
 			currentFruit->updateX();
 			draw();
-		}
+		}*/
+		int mouseX = 180 + (distrib(gen) * 4) + (distrib(gen) / 10 * 4);
+		currentFruit->x = mouseX;
+
 		currentFruit->setFalling(true);
 		DoFall(currentFruit);
 
 		if (currentFruit->y < 280) {
 			lose = true;
-			std::cout << "game lose" << std::endl;
 		}
 
 		if (currentFruit->getIsFall())
@@ -132,11 +160,9 @@ void game::DoFall(std::shared_ptr<fruit> fallenFruit) {
 	std::vector<std::shared_ptr<fruit>> toDelete;
 	while (!fallenFruit->getIsFall() && fallenFruit->getIsFalling()) {
 		fallenFruit->fall(fruits);
-		// Si le fruit s'autodétruit pendant la chute
 		if (fallenFruit->aEffacer) {
 			numberOfFruits--;
 
-			// Marquer pour suppression
 			toDelete.push_back(fallenFruit);
 			for (std::shared_ptr<fruit> f : fruits) {
 				if (f->aEffacer) {
@@ -144,6 +170,7 @@ void game::DoFall(std::shared_ptr<fruit> fallenFruit) {
 					numberOfFruits--;
 				}
 			}
+
 			// On nettoie
 			for (std::shared_ptr<fruit> f : toDelete) {
 				fruits.erase(std::remove(fruits.begin(), fruits.end(), f), fruits.end());
